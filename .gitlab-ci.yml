@@ -51,7 +51,7 @@ deploy:
     # Stop and remove any running container with the same name
     - docker stop devops-ml-app || true
     - docker rm devops-ml-app || true
-    # Run the container with the the pulled image
+    # Run the container with the pulled image
     - docker run -d -p 5000:5000 --name devops-ml-app $CI_REGISTRY_IMAGE:latest
   tags:
     - local
