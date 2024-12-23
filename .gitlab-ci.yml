@@ -38,12 +38,14 @@ security_scan:
   image: aquasec/trivy:latest  # Use Trivy image for vulnerability scanning
   script:
     - echo "Scanning Docker image with Trivy..."
-    - trivy --no-progress --exit-code 1 --severity HIGH,CRITICAL --ignore-unfixed --timeout 5m --format json -o trivy-report.json $CI_REGISTRY_IMAGE:latest
+    # Correct the command syntax: Scan the Docker image
+    - trivy image --format json --exit-code 1 --severity HIGH,CRITICAL --ignore-unfixed --timeout 5m -o trivy-report.json $CI_REGISTRY_IMAGE:latest
   artifacts:
     paths:
       - trivy-report.json  # Save the Trivy report as an artifact
     reports:
       secret_detection: trivy-report.json  # Use secret_detection for security reports
+
 
 deploy:
   stage: deploy
