@@ -33,6 +33,8 @@ test:
 
 deploy:
   stage: deploy
+  tags:
+    - local
   image: docker:latest
   services:
     - name: docker
