@@ -46,7 +46,7 @@ Add the following variables in **Settings > CI/CD > Variables**:
 
 | Variable Name          | Value                  | Description                                       |
 |------------------------|------------------------|---------------------------------------------------|
-| `CI_REGISTRY_USER`     | `<Your GitLab Username>` | Your GitLab username, e.g., `hamzamejri`.        |
+| `CI_REGISTRY_USER`     | `<Your GitLab Username>` | Your GitLab username, e.g., `alaajaghmoun`.        |
 | `CI_REGISTRY_PASSWORD` | `<Personal Access Token>`| A token with `read_registry` and `write_registry` scopes. |
 | `CI_REGISTRY`          | `registry.gitlab.com`   | The URL of GitLab’s Container Registry.          |
 
