@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌸Flower Recognition</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        input[type="file"] {
+            margin-bottom: 15px;
+            font-size: 1rem;
+        }
+
+        button {
+            background-color: #ff6f61;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        #image-preview {
+            margin-top: 20px;
+            max-width: 200px;
+            max-height: 200px;
+            object-fit: contain;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>🌸 Flower Recognition 🌼</h1>
+    <form id="upload-form" enctype="multipart/form-data">
+        <input type="file" name="file" id="file-input" accept="image/*" required />
+        <button type="submit">Predict</button>
+    </form>
+    <div id="result"></div>
+    <img id="image-preview" alt="Uploaded Image Preview" />
+
+    <script>
+        const fileInput = document.getElementById('file-input');
+        const form = document.getElementById('upload-form');
+        const resultDiv = document.getElementById('result');
+        const imagePreview = document.getElementById('image-preview');
+
+        // Show image preview
+        fileInput.addEventListener('change', () => {
+            const file = fileInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    imagePreview.src = e.target.result;
+                    imagePreview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                imagePreview.style.display = 'none';
+            }
+        });
+
+        // Handle form submission
+        form.onsubmit = async (e) => {
+            e.preventDefault();
+            const formData = new FormData(form);
+
+            // Show loading state
+            resultDiv.innerHTML = "Processing...";
+
+            try {
+                const response = await fetch('/', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    resultDiv.innerHTML = `
+                        <strong>Prediction:</strong> ${result.class}<br>
+                        <strong>Confidence:</strong> ${(result.confidence * 100).toFixed(2)}%
+                    `;
+                } else {
+                    const error = await response.json();
+                    resultDiv.innerHTML = `<span style="color:red;">${error.error}</span>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = "<span style='color:red;'>An error occurred. Please try again.</span>";
+            }
+        };
+    </script>
+</body>
+</html>
