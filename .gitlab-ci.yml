@@ -46,7 +46,7 @@ deploy:
     - echo "Deploying the Docker image locally..."
     # Log in to GitLab Container Registry
     - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
-    # Pull the latest image from GitLab Container Registry
+    # Pull the latest image from GitLab Contdocker pull $CI_REGISTRY_IMAGE:lainer Registry
     - docker pull $CI_REGISTRY_IMAGE:latest
     # Stop and remove any running container with the same name
     - docker stop devops-ml-app || true
