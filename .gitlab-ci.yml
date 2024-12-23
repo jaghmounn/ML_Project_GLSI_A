@@ -11,6 +11,7 @@ variables:
 stages:
   - build
   - test
+  - security_scan  # Added security_scan stage
   - deploy
 
 build:
@@ -31,6 +32,18 @@ test:
     - docker pull $CI_REGISTRY_IMAGE:latest
     - echo "Testing the Docker image..."
     - docker run --rm $CI_REGISTRY_IMAGE python -c "print('Tests Passed')"
+
+security_scan:
+  stage: security_scan  # New stage for security scanning
+  image: aquasec/trivy:latest  # Use Trivy image for vulnerability scanning
+  script:
+    - echo "Scanning Docker image with Trivy..."
+    - trivy --no-progress --exit-code 1 --severity HIGH,CRITICAL --ignore-unfixed --timeout 5m --format json -o trivy-report.json $CI_REGISTRY_IMAGE:latest
+  artifacts:
+    paths:
+      - trivy-report.json  # Save the Trivy report as an artifact
+    reports:
+      security: trivy-report.json  # Upload the Trivy report to GitLab Security Dashboard
 
 deploy:
   stage: deploy
