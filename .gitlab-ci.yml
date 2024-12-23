@@ -43,7 +43,7 @@ security_scan:
     paths:
       - trivy-report.json  # Save the Trivy report as an artifact
     reports:
-      security: trivy-report.json  # Upload the Trivy report to GitLab Security Dashboard
+      secret_detection: trivy-report.json  # Use secret_detection for security reports
 
 deploy:
   stage: deploy
@@ -62,8 +62,4 @@ deploy:
     - docker pull $CI_REGISTRY_IMAGE:latest
     - docker stop devops-ml-app || true
     - docker rm devops-ml-app || true
-    - docker run -d -p 5000:5000 --name devops-ml-app $CI_REGISTRY_IMAGE:latest
-  tags:
-    - local
-
-
+    - docke
